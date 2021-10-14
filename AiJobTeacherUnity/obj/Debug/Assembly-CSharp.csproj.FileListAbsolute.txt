@@ -1,0 +1,2 @@
+C:\Users\Shu Yong\Documents\AStar\UnityProject\JobTeacher\Ai-Job-Teacher\AiJobTeacherUnity\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\Shu Yong\Documents\AStar\UnityProject\JobTeacher\Ai-Job-Teacher\AiJobTeacherUnity\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
