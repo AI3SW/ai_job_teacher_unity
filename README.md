@@ -1,4 +1,4 @@
-# CNY Unity Version
+# AI Job Teacher Unity Version
 
 Open Project with unity 2020.3.7f1
 
