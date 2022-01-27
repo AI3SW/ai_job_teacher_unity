@@ -1,11 +1,10 @@
 ScriptsOnlyBuild:
   usedScripts:
-    Assembly-CSharp-firstpass.dll:
-    - UnityAsyncAwaitUtil.AsyncCoroutineRunner
     Assembly-CSharp.dll:
     - ActivatorControllers
     - AlphabetButton
     - AppManager
+    - AutoRotationUI
     - DeepFace
     - Deepface_Controller
     - GenericAppFunctions
@@ -37,6 +36,7 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
+    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
@@ -47,6 +47,8 @@ ScriptsOnlyBuild:
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
     - UnityEditor.Tilemaps.TilemapPrefabStageHelper
+    Unity.Mobile.AndroidLogcat.Editor.dll:
+    - Unity.Android.Logcat.AndroidLogcatManager
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.TextMeshPro.dll:
@@ -99,15 +101,15 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 682}
-    - Class: 114
-      Script: {instanceID: 1518}
+      Script: {instanceID: 684}
     - Class: 114
       Script: {instanceID: 1520}
     - Class: 114
       Script: {instanceID: 1522}
     - Class: 114
       Script: {instanceID: 1524}
+    - Class: 114
+      Script: {instanceID: 1526}
     - Class: 114
       Script: {instanceID: 1592}
     - Class: 114
@@ -119,83 +121,85 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1922}
     - Class: 114
-      Script: {instanceID: 2286}
+      Script: {instanceID: 2282}
     - Class: 114
-      Script: {instanceID: 2352}
+      Script: {instanceID: 2348}
     - Class: 114
-      Script: {instanceID: 2458}
+      Script: {instanceID: 2454}
     - Class: 114
-      Script: {instanceID: 2484}
+      Script: {instanceID: 2468}
     - Class: 114
-      Script: {instanceID: 2550}
+      Script: {instanceID: 2540}
     - Class: 114
-      Script: {instanceID: 2576}
+      Script: {instanceID: 2566}
     - Class: 114
-      Script: {instanceID: 2752}
+      Script: {instanceID: 2740}
     - Class: 114
-      Script: {instanceID: 2814}
+      Script: {instanceID: 2802}
     - Class: 114
-      Script: {instanceID: 2876}
+      Script: {instanceID: 2864}
     - Class: 114
-      Script: {instanceID: 2902}
+      Script: {instanceID: 2890}
     - Class: 114
-      Script: {instanceID: 2950}
+      Script: {instanceID: 2938}
     - Class: 114
-      Script: {instanceID: 2992}
+      Script: {instanceID: 2980}
     - Class: 114
-      Script: {instanceID: 3042}
+      Script: {instanceID: 3030}
     - Class: 114
-      Script: {instanceID: 3088}
+      Script: {instanceID: 3076}
     - Class: 114
-      Script: {instanceID: 3148}
+      Script: {instanceID: 3136}
     - Class: 114
-      Script: {instanceID: 3228}
+      Script: {instanceID: 3214}
     - Class: 114
-      Script: {instanceID: 3246}
+      Script: {instanceID: 3232}
     - Class: 114
-      Script: {instanceID: 3376}
+      Script: {instanceID: 3324}
     - Class: 114
-      Script: {instanceID: 3434}
+      Script: {instanceID: 3362}
     - Class: 114
-      Script: {instanceID: 3512}
+      Script: {instanceID: 3420}
     - Class: 114
-      Script: {instanceID: 3522}
+      Script: {instanceID: 3498}
     - Class: 114
-      Script: {instanceID: 3524}
+      Script: {instanceID: 3508}
     - Class: 114
-      Script: {instanceID: 3530}
+      Script: {instanceID: 3510}
     - Class: 114
-      Script: {instanceID: 3636}
+      Script: {instanceID: 3516}
     - Class: 114
-      Script: {instanceID: 3678}
+      Script: {instanceID: 3622}
     - Class: 114
-      Script: {instanceID: 3714}
+      Script: {instanceID: 3664}
     - Class: 114
-      Script: {instanceID: 4124}
+      Script: {instanceID: 3700}
     - Class: 114
-      Script: {instanceID: 4388}
+      Script: {instanceID: 4108}
     - Class: 114
-      Script: {instanceID: 4484}
+      Script: {instanceID: 4372}
     - Class: 114
-      Script: {instanceID: 4730}
+      Script: {instanceID: 4468}
     - Class: 114
-      Script: {instanceID: 4760}
+      Script: {instanceID: 4714}
     - Class: 114
-      Script: {instanceID: 4974}
+      Script: {instanceID: 4744}
     - Class: 114
-      Script: {instanceID: 5090}
+      Script: {instanceID: 4958}
     - Class: 114
-      Script: {instanceID: 5128}
+      Script: {instanceID: 5074}
     - Class: 114
-      Script: {instanceID: 5186}
+      Script: {instanceID: 5112}
     - Class: 114
-      Script: {instanceID: 5214}
+      Script: {instanceID: 5168}
     - Class: 114
-      Script: {instanceID: 5512}
+      Script: {instanceID: 5196}
     - Class: 114
-      Script: {instanceID: 6008}
+      Script: {instanceID: 5492}
     - Class: 114
-      Script: {instanceID: 6016}
+      Script: {instanceID: 5988}
+    - Class: 114
+      Script: {instanceID: 5996}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -443,12 +447,6 @@ ScriptsOnlyBuild:
     className: SoundManager
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Unity.2D.PixelPerfect.dll
-    namespaceName: UnityEngine.U2D
-    className: CinemachinePixelPerfect
-  - hash:
-      serializedVersion: 2
       Hash: 0a798b3f3a7ed1bec0c536eacd35398c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -629,7 +627,7 @@ ScriptsOnlyBuild:
     className: ReporterMessageReceiver
   - hash:
       serializedVersion: 2
-      Hash: 54289d6408995c339254d2781c2b0317
+      Hash: 4c4d7ac1835b12c310e88d7b8707b923
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: AppManager
@@ -653,7 +651,7 @@ ScriptsOnlyBuild:
     className: Scrollbar
   - hash:
       serializedVersion: 2
-      Hash: 96c7b3936bd61e6a629007a27eeea8f8
+      Hash: 30929bccb9d1a04b0a2f2af0b5a47862
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SpellingChar
@@ -1013,12 +1011,6 @@ ScriptsOnlyBuild:
     className: SpriteLibraryAsset
   - hash:
       serializedVersion: 2
-      Hash: 63bdc2cf3273aa9bf650350f19d2af61
-    assemblyName: Unity.2D.PixelPerfect.dll
-    namespaceName: UnityEngine.U2D
-    className: PixelPerfectCamera
-  - hash:
-      serializedVersion: 2
       Hash: 6980e81ddc615a861309d2d659cc3760
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -1116,4 +1108,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/AIJobTeacher.unity
-  playerPath: C:/Users/Shu Yong/Documents/AStar/UnityProject/JobTeacher/Ai-Job-Teacher/Apk/AiJobTeacher_v0.66.apk
+  playerPath: C:/Users/Shu Yong/Documents/AStar/UnityProject/JobTeacher/Ai-Job-Teacher/Apk/AiJobTeacher_v2.17AWS.apk

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Astar.App.AITeacher;
+using AIcube.AITeacher;
 using System.Text;
 public class JobInfoUI : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class JobInfoUI : MonoBehaviour
     [SerializeField] Sprite lockedSpr;
     [SerializeField] Sprite unlockedSpr;
 
-    [SerializeField] Astar.App.AITeacher.lockType lockstatus;
+    [SerializeField] AIcube.AITeacher.lockType lockstatus;
 
     public static string mergeString(List<string> stringList)
     {
@@ -40,13 +40,13 @@ public class JobInfoUI : MonoBehaviour
         OriginalJob.setTextureAndRatio(data.OriginalSpr, AspectRatioFitter.AspectMode.EnvelopeParent);
         Future.setTextureAndRatio(data.FutureSpr, AspectRatioFitter.AspectMode.EnvelopeParent);
 
-        setLock((Astar.App.AITeacher.lockType)data.lockstate);
+        setLock((AIcube.AITeacher.lockType)data.lockstate);
         refreshInfo();
     }
 
     public void updatePhoto(Texture2D texture)
     {
-        User.setTextureAndRatio(texture, AspectRatioFitter.AspectMode.EnvelopeParent);
+        User.setTextureAndRatio(texture, AspectRatioFitter.AspectMode.WidthControlsHeight);
     }
     public void refreshInfo()
     {
@@ -71,7 +71,7 @@ public class JobInfoUI : MonoBehaviour
         Future.gameObject.SetActive(false);
     }
 
-    public void setLock(Astar.App.AITeacher.lockType locknum)
+    public void setLock(AIcube.AITeacher.lockType locknum)
     {
         lockstatus = locknum;
         switch (locknum)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Astar.App.AITeacher
+namespace AIcube.AITeacher
 {
 
 
@@ -33,7 +33,7 @@ namespace Astar.App.AITeacher
         public string user_id;
         public string imageStr;
         public string version;
-
+        public PrivacyPolicy policy;
         public List<JobData> JobProfile;
     }
 
@@ -47,7 +47,11 @@ namespace Astar.App.AITeacher
         public string ImageStrOriginal;
         public List<string> descriptions;
     }
-
+    [Serializable]
+    public class PrivacyPolicy
+    {
+        public bool agree = false;
+    }
     [Serializable]
     public enum lockType
     {

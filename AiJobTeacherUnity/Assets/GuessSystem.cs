@@ -51,8 +51,15 @@ public class GuessSystem : MonoBehaviour
     void AddLetter(string singleCharString)
     {
         if (guess.Length == answer.Length) return;
-        guess.Append(singleCharString);
 
+        
+        if(answer[guess.Length] == ' ')
+        {
+            guess.Append(" ");
+            spellingCharList[guess.Length - 1].setLetter(" ");
+        }
+            
+        guess.Append(singleCharString);
         spellingCharList[guess.Length - 1].setLetter(singleCharString);
         CheckAnswer();
     }
@@ -78,6 +85,12 @@ public class GuessSystem : MonoBehaviour
         spellingCharList[guess.Length - 1].clearLetter();
         //Debug.Log(guess.Length);
         guess.Remove(guess.Length - 1,1);
+        if(guess.Length > 1)
+            if(spellingCharList[guess.Length - 1].getLetter() == " ")
+            {
+                //spellingCharList[guess.Length - 1].clearLetter();
+                guess.Remove(guess.Length - 1, 1);
+            }
         //guess.TrimEnd();
         //Debug.Log(guess.Length);
 
@@ -115,12 +128,12 @@ public class GuessSystem : MonoBehaviour
 
     }
 
-    public void ClearAndPopulateGameList(List<Astar.App.AITeacher.FullJobData> jobList)
+    public void ClearAndPopulateGameList(List<AIcube.AITeacher.FullJobData> jobList,bool localData)
     {
         tempList.Clear();
         foreach(var job in jobList)
         {
-            
+            if (localData && job.lockstate == AIcube.AITeacher.lockType.Unknown) continue;
             tempList.Add(job.name);
         }
         StartButton.interactable = true;
@@ -129,8 +142,9 @@ public class GuessSystem : MonoBehaviour
     void randomizeJob()
     {
         Debug.Log(tempList.Count);
-        answerId = UnityEngine.Random.Range(0, tempList.Count);
-        GenerateWord(tempList[answerId]);
+        int randomID = UnityEngine.Random.Range(0, tempList.Count);
+        GenerateWord(tempList[randomID]);
+        answerId = AppManager.Singleton.job_Catalogue.getIdFromJobName(tempList[randomID]);
         ShuffleButtons();
 
     }
@@ -233,10 +247,11 @@ public class GuessSystem : MonoBehaviour
     void GenerateWord(string newWord)
     {
         answer = newWord.ToUpper();
+        answer.Replace(" ", "");
         ResetSpellingArea();
         UniqueAlphabets.Clear();
         //Debug.Log(SplitIntoUniqueList(("Hellllllo").ToCharArray()).Count); // test , 4
-        UniqueAlphabets =  SplitIntoUniqueList(answer.ToCharArray());
+        UniqueAlphabets =  SplitIntoUniqueList(answer.Replace(" ", "").ToCharArray());
         //Debug.Log(UniqueAlphabets.Count);
         int count = answer.Length;
         foreach(var obj in spellingCharList)
@@ -244,6 +259,14 @@ public class GuessSystem : MonoBehaviour
             if (count > 0) {
                 obj.gameObject.SetActive(true);
                 obj.clearLetter();
+                if(answer[answer.Length - count] != ' ')
+                {
+                    obj.enableWord();
+                    
+                } else
+                {
+                    obj.disableWord();
+                }
             }
             else
             {
@@ -265,6 +288,7 @@ public class GuessSystem : MonoBehaviour
 
     public async void SkipWord()
     {
+        AppManager.Singleton.loadingScreen.SetActive(true);
         randomizeJob();
         bool isconnected = await AppManager.Singleton.getOnlineJobAIPhoto();
 
@@ -281,6 +305,7 @@ public class GuessSystem : MonoBehaviour
         }
         */
         gSysUI.updateUIData(answerId);
+        AppManager.Singleton.loadingScreen.SetActive(false);
     }
 
 

@@ -21,18 +21,18 @@ public class GuessSystemUI : MonoBehaviour
     RawImageWithRatio WinImgFuture;
     [SerializeField]
     RawImageWithRatio WinCurrent;
-    // Update is called once per frame
 
     Texture2D tempText = null;
+
     public void updateUIData(int jobid)
     {
-        Astar.App.AITeacher.FullJobData temp = AppManager.Singleton.getJobData(jobid);
+        AIcube.AITeacher.FullJobData temp = AppManager.Singleton.getJobData(jobid);
         jobName.text = temp.name;
         description.text = temp.descriptions[Random.Range(0, temp.descriptions.Count)];
         LoseImg.setTextureAndRatio(temp.OriginalSpr, AspectRatioFitter.AspectMode.EnvelopeParent);
         gameImg.setTextureAndRatio(temp.FutureSpr, AspectRatioFitter.AspectMode.EnvelopeParent);
         WinImgFuture.setTextureAndRatio(temp.FutureSpr, AspectRatioFitter.AspectMode.EnvelopeParent);
-        WinCurrent.setTextureAndRatio(AppManager.Singleton.getMyPhoto(), AspectRatioFitter.AspectMode.EnvelopeParent);
+        WinCurrent.setTextureAndRatio(AppManager.Singleton.getMyPhoto(), AspectRatioFitter.AspectMode.WidthControlsHeight);
         Debug.Log("updateData");
     }
 

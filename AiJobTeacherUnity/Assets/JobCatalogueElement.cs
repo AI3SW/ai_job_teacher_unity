@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Astar.App.AITeacher;
+using AIcube.AITeacher;
 public class JobCatalogueElement : MonoBehaviour, ScrollViewElement
 {
     [SerializeField]

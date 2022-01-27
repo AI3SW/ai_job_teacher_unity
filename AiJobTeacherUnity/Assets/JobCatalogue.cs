@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Astar.App.AITeacher;
+using AIcube.AITeacher;
 public class JobCatalogue : MonoBehaviour
 {
     [SerializeField]
@@ -70,6 +70,17 @@ public class JobCatalogue : MonoBehaviour
         }
     }
 
+    public int getIdFromJobName(string jobname)
+    {
+        int count = 0;
+        foreach (var obj in catalogueList)
+        {
+            if (string.Compare(obj.jobData.name, jobname) == 0) return count;
+            ++count;
+        }
+        return -1;
+    }
+
     public void handleButtonOnJobSelected(int jobindex,Button btn)
     {
         if(catalogueList[jobindex].jobData.lockstate == lockType.Unknown)
@@ -83,10 +94,10 @@ public class JobCatalogue : MonoBehaviour
 
     public void progressLockState(lockType lockstate, int jobId)
     {
-        Debug.Log(jobId);
-        Debug.Log(catalogueList.Count);
-        Debug.Log(catalogueList[jobId].jobData.lockstate);
-        Debug.Log(lockstate);
+        //Debug.Log(jobId);
+        //Debug.Log(catalogueList.Count);
+        //Debug.Log(catalogueList[jobId].jobData.lockstate);
+        //Debug.Log(lockstate);
         if (catalogueList[jobId].jobData.lockstate < lockstate)
         {
             //Debug.Log("update lock");

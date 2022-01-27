@@ -16,8 +16,9 @@ public class RawImageWithRatio : MonoBehaviour
     }
     public void setTextureAndRatio(Texture2D newtexture, AspectRatioFitter.AspectMode ratioMode = AspectRatioFitter.AspectMode.None)
     {
-        setRatio(ratioMode);
         setTexture(newtexture);
+        setRatio(ratioMode);
+        
     }
     public void setRatio(float val)
     {
@@ -43,14 +44,17 @@ public class RawImageWithRatio : MonoBehaviour
                 imageRatio.aspectRatio = (float)_rawImage.texture.width / (float)_rawImage.texture.height;
                 break;
             case AspectRatioFitter.AspectMode.WidthControlsHeight:
-                imageRatio.aspectRatio = (float)_rawImage.texture.height / (float)_rawImage.texture.width;
+                imageRatio.aspectRatio = (float)_rawImage.texture.width / (float)_rawImage.texture.height;
+                
                 break;
             default:
                 imageRatio.aspectRatio = 1;
                 break;
 
         }
-
+        //Debug.Log(mode);
+        //Debug.Log(_rawImage.texture.height + "  " + _rawImage.texture.width);
+        //Debug.Log(imageRatio.aspectRatio);
     }
     public void setTexture(Texture newtexture)
     {

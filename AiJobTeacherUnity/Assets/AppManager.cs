@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Astar.App.AITeacher;
+using AIcube.AITeacher;
 using System.Threading.Tasks;
-using Astar.REST;
+using AIcube.REST;
 
 public class AppManager : MonoBehaviour
 {
@@ -72,47 +72,83 @@ public class AppManager : MonoBehaviour
     public WebcamController webcam;
 
     [SerializeField]
-    Sprite defaultPotraitForMissingImage;
+    public Sprite defaultPotraitForMissingImage;
 
     [SerializeField]
     public PlayerJsonSaveData SaveData;
 
+    [SerializeField]
+    public GameObject loadingScreen;
+    [SerializeField]
+    public GameObject ErrorScreen;
     async void InitData()
     {
-
+        loadingScreen.gameObject.SetActive(true);
         LoadSavedFile();
 
         
         RESTServer = new RESTinterface(deepface.getServerOptions());
         Debug.Log(RESTServer.serverInfo.finalUrl);
+        /*
+        Ping ping = new Ping(RESTServer.serverInfo._ip);
+        float timeout = 2000;
+        float timer = Time.realtimeSinceStartup;
+
+        await new WaitUntil(() => { return ping.isDone; });
+        timer = Time.realtimeSinceStartup - timer;
+        Debug.Log(timer);
+
+        bool connectionResult = false;
+
+        if (ping.time < 0 || ping.time >= timeout)
+        {
+            //do failure stuff
+        }
+        else
+        {
+        }
+        */
+        bool localdataOnly = false;
         string versionString = await getDataVersion();
         List<FullJobData> JobDataList = new List<FullJobData>();
         if (!string.IsNullOrEmpty( versionString) && string.Compare(versionString,SaveData.version) != 0)
         {
             Debug.Log("getting online data");
+
             JobDataList = await getDataOnlineAndMerge();
             SaveData.version = versionString;
 
-            //call DB get full list
-            if (JobDataList.Count > 0) Debug.Log("data retrieved");
-            else {
-                Debug.Log("dataNotFound");
-            }
+
             Debug.Log("merging online and local data");
 
+        } else if(string.IsNullOrEmpty(versionString))
+        {
+            JobDataList = getDataFromSave();
+            localdataOnly = true;
+
+            Debug.Log("only loading local data");
         } else
         {
             JobDataList = getDataFromSave();
-            Debug.Log(JobDataList.Count);
-            Debug.Log("only loading local data");
+
+
+            //Debug.Log(JobDataList.Count);
+
+            Debug.Log("No updates with working connections");
         }
 
         Debug.Log("Populating Game System");
-        Debug.Log(JobDataList.Count);
-        guessSys.ClearAndPopulateGameList(JobDataList);
+        //Debug.Log(JobDataList.Count);
+        guessSys.ClearAndPopulateGameList(JobDataList , localdataOnly);
         job_Catalogue.InitJobCatalogueAndInfo(JobDataList);
+        loadingScreen.gameObject.SetActive(false);
+        if (JobDataList.Count > 0) Debug.Log("data retrieved");
+        else
+        {
+            Debug.Log("dataNotFound");
+            ErrorScreen.gameObject.SetActive(true);
 
-
+        }
     }
 
     /// <summary>
@@ -122,13 +158,13 @@ public class AppManager : MonoBehaviour
     public async Task<string> getDataVersion()
     {
         //if(RESTServer == null) 
-        var result = await RESTServer.getJsonData<Astar.App.AITeacher.Version>("version");
+        var result = await RESTServer.getJsonData<AIcube.AITeacher.Version>("version");
         string versionNumber = (result.isConnected)? result.jsonData.version : "";
         //Debug.Log(versionNumber);
         return versionNumber;
     }
 
-    public void updateImage(Astar.REST.DeepFaceTech.ImageOutput data)
+    public void updateImage(AIcube.REST.DeepFaceTech.ImageOutput data)
     {
        // Debug.Log("has come in");
         //Debug.Log(data.output_img);
@@ -136,6 +172,8 @@ public class AppManager : MonoBehaviour
         {
             //Debug.Log("has image1");
             SaveData.JobProfile[guessSys.answerId].ImageStrAI = data.output_img;
+            saveUserData();
+            setJobTolocked();
             //Debug.Log("has image2");
             Texture2D temptext = guessSys.guessUI.updateAIImage(data.output_img);
             job_Catalogue.updateAiImage(guessSys.answerId, temptext);
@@ -149,8 +187,9 @@ public class AppManager : MonoBehaviour
 
     public async Task<bool> getOnlineJobAIPhoto()
     {
-        Debug.Log(guessSys.answerId);
+        //Debug.Log(guessSys.answerId);
         bool isConnected = false;
+        //Debug.Log("Data : "+SaveData.JobProfile[guessSys.answerId].ImageStrAI);
         if (string.IsNullOrEmpty( SaveData.JobProfile[guessSys.answerId].ImageStrAI))
         {
             isConnected = await deepface.SendDeepFace(SaveData.imageStr, SaveData.user_id, guessSys.answerId + 1);
@@ -178,7 +217,7 @@ public class AppManager : MonoBehaviour
 
 
 
-    public void createNewJobProfile(Astar.REST.DeepFaceTech.Job data)
+    public void createNewJobProfile(AIcube.REST.DeepFaceTech.Job data)
     {
         JobData temp = new JobData();
         temp.id = data.id;
@@ -251,7 +290,7 @@ public class AppManager : MonoBehaviour
         List<FullJobData> dataList = new List<FullJobData>();
 
         //await db
-        Astar.REST.DeepFaceTech.JobListOutput JobDataOnline = await deepface.getJobList();
+        AIcube.REST.DeepFaceTech.JobListOutput JobDataOnline = await deepface.getJobList();
 
         int i = 0;
 
@@ -293,9 +332,11 @@ public class AppManager : MonoBehaviour
         SaveData.user_id = SystemInfo.deviceUniqueIdentifier;
         SaveData.imageStr = "";
         SaveData.version = "";
+        SaveData.policy = new PrivacyPolicy();
+        SaveData.policy.agree = false;
     }
 
-    public void PopulateSaveFile(Astar.REST.DeepFaceTech.JobListOutput rawDataList)
+    public void PopulateSaveFile(AIcube.REST.DeepFaceTech.JobListOutput rawDataList)
     {
         for (int i = SaveData.JobProfile.Count; i < rawDataList.jobs.Count;++i)
         {
@@ -303,7 +344,7 @@ public class AppManager : MonoBehaviour
         }
     }
 
-    void MergeSaveData(ref List<FullJobData> dataList, Astar.REST.DeepFaceTech.JobListOutput rawDataList)
+    void MergeSaveData(ref List<FullJobData> dataList, AIcube.REST.DeepFaceTech.JobListOutput rawDataList)
     {
         Debug.Log(SaveData.JobProfile.Count);
         int k = 0;
@@ -324,9 +365,10 @@ public class AppManager : MonoBehaviour
     }
     string SaveFilePath = "/SaveFile";
     string SaveFileDirectory= "/Test";
+
     void LoadSavedFile()
     {
-        string result = Astar.Utils.IOUtils.loadStringTextfromFile(SaveFileDirectory+SaveFilePath);
+        string result = AIcube.Utils.IOUtils.loadStringTextfromFile(SaveFileDirectory+SaveFilePath);
         
         if (string.IsNullOrEmpty(result))
         {
@@ -336,13 +378,28 @@ public class AppManager : MonoBehaviour
         {
             SaveData = JsonUtility.FromJson<PlayerJsonSaveData>(result);
 
+
         }
-        
+        promptPrivacyPolicy();
+    }
+
+    [SerializeField]
+    GameObject PrivacyPolicy;
+    void promptPrivacyPolicy()
+    {
+        //Debug.Log(SaveData.policy.agree);
+        PrivacyPolicy.gameObject.SetActive(!SaveData.policy.agree);
     }
     void saveUserData()
     {
         string data = JsonUtility.ToJson(SaveData);
-        Astar.Utils.IOUtils.saveDataToFile(SaveFileDirectory, SaveFilePath, data);
+        AIcube.Utils.IOUtils.saveDataToFile(SaveFileDirectory, SaveFilePath, data);
+    }
+
+    public void agreeToPolicy()
+    {
+        SaveData.policy.agree = true;
+        saveUserData();
     }
 
     bool wasRedirected = false;
