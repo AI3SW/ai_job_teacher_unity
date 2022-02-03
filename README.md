@@ -2,6 +2,10 @@
 
 Open Project with unity 2020.3.7f1
 
+# Demo
+
+<img src="demo.gif" height="512">
+
 # Important GameObjects to Take Note
 Most important sccripts are found under the system gameobject
 
