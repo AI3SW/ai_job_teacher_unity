@@ -23213,7 +23213,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5451143966760131793, guid: ab8abe2362d48224eaa8eba49ca54b90, type: 3}
       propertyPath: _selectedSrc
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5451143966760131793, guid: ab8abe2362d48224eaa8eba49ca54b90, type: 3}
       propertyPath: AIModels.Array.size
