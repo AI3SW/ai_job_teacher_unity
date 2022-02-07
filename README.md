@@ -3,10 +3,7 @@
 Open Project with unity 2020.3.7f1
 
 # Demo
-
-<p align="center">
-    <img src="demo.gif" height="720">
-</p>
+[![AI Job Teacher Demo video](https://res.cloudinary.com/marcomontalbano/image/upload/v1644200876/video_to_markdown/images/youtube--qRvs6QJLl0k-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/qRvs6QJLl0k "AI Job Teacher Demo video")
 
 # Important GameObjects to Take Note
 Most important sccripts are found under the system gameobject
